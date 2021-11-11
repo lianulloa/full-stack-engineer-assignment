@@ -1,0 +1,25 @@
+{
+  "name": "full-stack-engineer-assignment",
+  "version": "1.0.0",
+  "description": "This is Pluggy's official full-stack engineer challenge that allows any developer that want to work with us to apply. We appreciate the time you're taking to give us a chance! We're anxious to see what's next.",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lianulloa/full-stack-engineer-assignment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lianulloa/full-stack-engineer-assignment/issues"
+  },
+  "homepage": "https://github.com/lianulloa/full-stack-engineer-assignment#readme",
+  "devDependencies": {
+    "tslint": "^6.1.3",
+    "typescript": "^4.4.4"
+  }
+}
