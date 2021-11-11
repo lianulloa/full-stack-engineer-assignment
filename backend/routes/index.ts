@@ -1,0 +1,1 @@
+export { default as QuoteRouter} from "./quotes.routes"
