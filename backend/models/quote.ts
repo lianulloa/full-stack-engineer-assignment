@@ -29,7 +29,8 @@ const QuoteSchema = new Schema<IQuote>({
       delete ret._id
     },
     versionKey: false
-  }
+  },
+  timestamps: true
 })
 
 export default model<IQuote>("Quote", QuoteSchema)

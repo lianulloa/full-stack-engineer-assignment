@@ -1,7 +1,7 @@
 import express, { Application } from "express"
 import cors from "cors"
 import { dbConnection } from './db/config.db';
-import { QuoteRouter } from "./routes";
+import { AverageRouter, QuoteRouter } from "./routes";
 
 class Server {
   private app: Application
@@ -34,6 +34,7 @@ class Server {
 
   private routes() {
     this.app.use(this.apiPathPrefix + this.paths.quotes, QuoteRouter)
+    this.app.use(this.apiPathPrefix + this.paths.average, AverageRouter)
   }
   
   listen() {

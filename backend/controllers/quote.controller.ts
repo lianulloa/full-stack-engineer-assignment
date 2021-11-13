@@ -1,11 +1,25 @@
 import { Request, Response } from "express"
-import QuoteModel from '../models/quote';
+import QuoteModel from '../models/quote'
+import { groupQuotesBy } from "../models/quote.helpers"
+
 
 export const listQuotes = async (req: Request, res: Response) => {
-  const quotes = await QuoteModel.find()
-  return res.json(quotes)
+  const { sortBy = "createdAt", groupBy = "" } = req.query
+
+  try {
+    if (!groupBy) {
+      const quotes = await QuoteModel.find().sort(sortBy)
+      return res.json(quotes)
+    } else {
+      const grouped = await groupQuotesBy(groupBy, sortBy)
+      return res.json(grouped)
+    }
+  } catch (e) {
+    return res.status(400).json({error: e})
+  }
 }
 
+//FIXME: just for testing purposes
 export const createQuote = async (req: Request, res: Response) => {
   const { body } = req
   const quote = new QuoteModel(body)
