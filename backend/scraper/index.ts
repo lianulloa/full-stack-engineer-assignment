@@ -1,5 +1,5 @@
 import { Browser} from "puppeteer"
-import { Quotes } from "../models"
+import { Quote } from "../models/quote"
 import { Finder } from './finders';
 
 class Scraper {
@@ -8,7 +8,7 @@ class Scraper {
     this.browser = browser
   }
 
-  async getBlueDolarQuotes(url: string, finder: Finder): Promise<Quotes| Quotes[]> {
+  async getBlueDolarQuotes(url: string, finder: Finder): Promise<Quote| Quote[] |undefined> {
     const page = await this.browser.newPage()
     await page.goto(url, { waitUntil: "networkidle2" })
     const res = await page.evaluate(finder, url)

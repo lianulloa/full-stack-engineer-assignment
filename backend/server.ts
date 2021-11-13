@@ -6,6 +6,7 @@ import { QuoteRouter } from "./routes";
 class Server {
   private app: Application
   private port: string
+  private apiPathPrefix = "/api"
   private paths = {
     quotes: "/quotes",
     average: "/average",
@@ -32,7 +33,7 @@ class Server {
   }
 
   private routes() {
-    this.app.use(this.paths.quotes, QuoteRouter)
+    this.app.use(this.apiPathPrefix + this.paths.quotes, QuoteRouter)
   }
   
   listen() {
