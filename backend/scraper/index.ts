@@ -3,33 +3,8 @@ import { Quote } from "../models/quote"
 import { FinderSelector} from './finders';
 import { createQuotes } from '../controllers/quote.controller';
 import { genericFinder } from './finders';
+import SourceModel from '../models/source';
 
-const SOURCES = [
-  {
-    url: "https://www.ambito.com/contenidos/dolar.html",
-    selector: {
-      valuesParentSelector: ".variacion-max-min-chico.indicador[data-indice='/dolar/informal']",
-      buySelector: ".data-compra",
-      sellSelector: ".data-venta"
-    }
-  },
-  {
-    url: "https://www.dolarhoy.com",
-    selector: {
-      valuesParentSelector: "a.title[href='/cotizaciondolarblue'] + .values",
-      buySelector: ".compra .val",
-      sellSelector: ".venta .val"
-    }
-  },
-  {
-    url: "https://www.cronista.com/MercadosOnline/moneda.html?id=ARSB",
-    selector: {
-      valuesParentSelector: ".main-container a[href='/MercadosOnline/moneda.html?id=ARSB']",
-      buySelector: ".buy-value",
-      sellSelector: ".sell-value"
-    }
-  }
-]
 class Scraper {
   browser: Browser
   private quotes: Quote[] = []
@@ -38,13 +13,13 @@ class Scraper {
   }
 
   async getBlueDolarQuotes(url: string, selector: FinderSelector): Promise<Quote| Quote[] |undefined> {
-    console.log("getting quote from ", url)
+    // console.log("getting quote from ", url)
     const page = await this.browser.newPage()
     await page.goto(url, { waitUntil: "networkidle2" })
     const res = await page.evaluate(genericFinder, url, selector)
     if (res) {
       this.quotes.push(res)
-      console.log(res)
+      // console.log(res)
     }
     return res
   }
@@ -64,7 +39,8 @@ export const scrapperJob = async () => {
     let browser = await puppeteer.launch()
     const scraper = new Scraper(browser)
     const promises = []
-    for (const { url, selector } of SOURCES) {
+    const sources = await SourceModel.find({active: true})
+    for (const { url, selector } of sources) {
       promises.push(scraper.getBlueDolarQuotes(
         url,
         selector
