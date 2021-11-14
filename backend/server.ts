@@ -17,12 +17,12 @@ class Server {
     this.app = express()
     this.port = process.env.PORT || "8080"
 
-    this.connectToDB()
     this.middlewares()
     this.routes()
   }
 
   async connectToDB() {
+    console.log("Connecting to db...")
     await dbConnection()
   }
 

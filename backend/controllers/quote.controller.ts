@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
-import QuoteModel from '../models/quote'
+import QuoteModel, {Quote} from '../models/quote'
 import { groupQuotesBy } from "../models/quote.helpers"
-
 
 export const listQuotes = async (req: Request, res: Response) => {
   const { sortBy = "createdAt", groupBy = "" } = req.query
@@ -33,5 +32,15 @@ export const createQuote = async (req: Request, res: Response) => {
     res.status(400).json({
       error
     })
+  }
+}
+
+export const createQuotes = async (quotes: Quote[]) => {
+  try {
+    await QuoteModel.create(quotes)
+    console.log("quotes created")
+  } catch (e) {
+    console.error(e)
+    throw e
   }
 }
