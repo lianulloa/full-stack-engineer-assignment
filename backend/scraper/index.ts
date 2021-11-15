@@ -35,6 +35,7 @@ class Scraper {
 }
 
 export const scrapperJob = async () => {
+  // console.log("scrapperJob")
   try {
     let browser = await puppeteer.launch()
     const scraper = new Scraper(browser)
