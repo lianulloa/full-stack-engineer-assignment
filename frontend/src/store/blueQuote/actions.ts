@@ -15,12 +15,29 @@ export const actions = {
             //GroupedQuote
             acc[value._id] = value.quotes
           } else {
-            //process Quote if need. (I think I won't need this for the challenge)
+            //process Quote if needed. (I think I won't need this for the challenge)
           }
           return acc
         }, {})
         dispatch(mutations.setQuotes(quotes))
         resolve(quotes)
+      } catch (e) {
+        reject(e)
+      }
+    })
+  },
+  getQuotesBySource: (query: {source:string, minutesAway: number}) => (dispatch: Dispatch) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { data } = await quoteApi.list({
+          source: query.source,
+          minutesAway: query.minutesAway
+        })
+        dispatch(mutations.setQuotesBySource({
+          source: query.source,
+          quotes: data
+        }))
+        resolve(data)
       } catch (e) {
         reject(e)
       }

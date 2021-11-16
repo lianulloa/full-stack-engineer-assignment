@@ -3,12 +3,12 @@ import QuoteModel, {Quote} from '../models/quote'
 import { getQuotesBy } from "../models/quote.helpers"
 
 export const listQuotes = async (req: Request, res: Response) => {
-  const { sortBy = "createdAt", groupBy, minutesAway = 60 } = req.query
+  const { sortBy = "createdAt", groupBy, minutesAway = 60, source } = req.query
   const miliseconds = Number(minutesAway) * 60 * 1000
   const from = new Date(Date.now() - miliseconds)
 
   try {
-    const quotes = await getQuotesBy({groupBy, sortBy, from})
+    const quotes = await getQuotesBy({groupBy, sortBy, from, source})
     return res.json(quotes)
   } catch (e) {
     return res.status(400).json({error: e})

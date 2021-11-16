@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import CssBaseline from '@mui/material/CssBaseline'
 import Container from '@mui/material/Container'
@@ -14,15 +14,18 @@ function App() {
   const average = useSelector(blueQuoteSelectors.average)
   const slippage = useSelector(blueQuoteSelectors.slippage)
   const dispatch = useDispatch()
+  let cancelInterval: any = useRef()
 
   const [showModal, setShowModal] = useState(false)
   const [chartSource, setChartSource] = useState("")
   const handleShowModal = (source: string) => {
     setShowModal(true)
     setChartSource(source)
+    clearInterval(cancelInterval.current)
   }
   const handleCloseModal = () => {
     setShowModal(false)
+    cancelInterval.current = setUpInterval()
   }
 
   const refreshData = () => {
@@ -36,7 +39,7 @@ function App() {
 
   useEffect(() => {
     refreshData()
-    setUpInterval()
+    cancelInterval.current = setUpInterval()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
@@ -64,6 +67,7 @@ function App() {
           open={showModal}
           onClose={handleCloseModal}
           quotes={quotes[chartSource]}
+          source={chartSource}
         />
       </Container>
     </React.Fragment>
