@@ -1,4 +1,5 @@
-import express, { Application } from "express"
+import express, { Application, Request, Response } from "express"
+import path from "path"
 import cors from "cors"
 import { dbConnection } from './db/config.db';
 import { AverageRouter, QuoteRouter, SlippageRouter } from "./routes";
@@ -27,7 +28,7 @@ class Server {
   }
 
   private middlewares() {
-    this.app.use(express.static("public"))
+    this.app.use(express.static(path.resolve("./")+ "/frontend/build"))
     this.app.use(cors())
     this.app.use(express.json())
   }
@@ -36,6 +37,10 @@ class Server {
     this.app.use(this.apiPathPrefix + this.paths.quotes, QuoteRouter)
     this.app.use(this.apiPathPrefix + this.paths.average, AverageRouter)
     this.app.use(this.apiPathPrefix + this.paths.slippage, SlippageRouter)
+    this.app.use("*", (req: Request, res: Response): void => {
+      res.sendFile(path.resolve("./") + "/frontend/build/index.html")
+    })
+    
   }
   
   listen() {

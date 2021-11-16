@@ -1,18 +1,15 @@
 import { Request, Response } from "express"
 import QuoteModel, {Quote} from '../models/quote'
-import { groupQuotesBy } from "../models/quote.helpers"
+import { getQuotesBy } from "../models/quote.helpers"
 
 export const listQuotes = async (req: Request, res: Response) => {
-  const { sortBy = "createdAt", groupBy = "" } = req.query
+  const { sortBy = "createdAt", groupBy, minutesAway = 60 } = req.query
+  const miliseconds = Number(minutesAway) * 60 * 1000
+  const from = new Date(Date.now() - miliseconds)
 
   try {
-    if (!groupBy) {
-      const quotes = await QuoteModel.find().sort(sortBy)
-      return res.json(quotes)
-    } else {
-      const grouped = await groupQuotesBy(groupBy, sortBy)
-      return res.json(grouped)
-    }
+    const quotes = await getQuotesBy({groupBy, sortBy, from})
+    return res.json(quotes)
   } catch (e) {
     return res.status(400).json({error: e})
   }

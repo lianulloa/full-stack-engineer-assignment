@@ -1,22 +1,43 @@
 import QuoteModel from "./quote"
 import { Quote } from './quote';
 
-export const groupQuotesBy = async (group: any, sortBy: any) => {
-  return QuoteModel.aggregate()
-    .sort(sortBy)
-    .group({
-      _id: "$" + group,
+interface AggregateOptions {
+  groupBy?: any
+  sortBy?: any,
+  from?: Date
+}
+
+export const getQuotesBy = async ({sortBy, from,groupBy}: AggregateOptions) => {
+  let toProject: any = { _id: 0, __v: 0, updatedAt: 0, [groupBy]: 0 }
+
+  const pipeline = QuoteModel.aggregate()
+  if (from) {
+    pipeline.match({createdAt: {$gte: from}})
+  }
+
+  if (sortBy) {
+    pipeline.sort(sortBy + " source")
+  }
+
+  if (groupBy) {
+    pipeline.group({
+      _id: "$" + groupBy,
       quotes: {
         $push: "$$ROOT"
       }
     })
-    .project({ quotes: { _id: 0, __v: 0, updatedAt: 0, [group]: 0 } })
+    toProject = { quotes: toProject }
+  }
+
+
+  return pipeline.project(toProject)
+
 }
 
 type getLastQuoteBySource = () => Promise<Quote[]>
 
 export const getLastQuoteBySource: getLastQuoteBySource = async () => {
-  const grouped = await groupQuotesBy("source", "-createdAt")
+  const grouped = await getQuotesBy({ groupBy: "source",  sortBy:"-createdAt"})
   return grouped.map(quoteGroup => ({
     buy_price: quoteGroup.quotes[0].buy_price,
     sell_price: quoteGroup.quotes[0].sell_price,

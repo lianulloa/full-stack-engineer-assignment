@@ -11,7 +11,7 @@ const main = async () => {
   await server.connectToDB()
   server.listen()
 
-  cron.schedule("* * * * *",scrapperJob)
+  cron.schedule("* * * * *", scrapperJob)
 
 }
 
