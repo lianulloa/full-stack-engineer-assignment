@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction,  } from "@reduxjs/toolkit"
 import { AveragePrice, } from '../../api/average'
+import { QuoteSlippage } from '../../api/slippage';
 export * from "./selectors"
 export * from "./actions"
 
@@ -7,12 +8,16 @@ interface blueQuoteState {
   quotes: {
     [source: string]: any
   },
-  average: AveragePrice | null
+  average: AveragePrice | null,
+  slippage: {
+    [source: string]: Omit<QuoteSlippage, "source">
+  }
 }
 
 const initialState: blueQuoteState = {
   quotes: {},
-  average: null
+  average: null,
+  slippage: {}
 }
 
 const blueQuoteSlice = createSlice({
@@ -27,6 +32,9 @@ const blueQuoteSlice = createSlice({
     },
     setAverage: (state, action) => {
       state.average = action.payload
+    },
+    setQuoteSlippage: (state, action) => {
+      state.slippage = action.payload
     }
   }
 })

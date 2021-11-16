@@ -11,10 +11,12 @@ import './App.css'
 function App() {
   const quotes = useSelector(blueQuoteSelectors.quotes)
   const average = useSelector(blueQuoteSelectors.average)
+  const slippage = useSelector(blueQuoteSelectors.slippage)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(blueQuoteActions.getQuotes())
     dispatch(blueQuoteActions.getAverage())
+    dispatch(blueQuoteActions.getSlippage())
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
@@ -33,6 +35,7 @@ function App() {
                     source
                   }
                 }
+                slippage={slippage[source]}
               />
           )}
         </Grid>
