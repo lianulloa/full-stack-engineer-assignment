@@ -34,7 +34,7 @@ export const selectors = {
 export const mutations = blueQuoteSlice.actions
 
 export const actions = {
-  getQuotes: (query = {groupBy: "source"}) => (dispatch: Dispatch) => {
+  getQuotes: (query = {groupBy: "source", minutesAway: 1440}) => (dispatch: Dispatch) => {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await quoteApi.list(query)
