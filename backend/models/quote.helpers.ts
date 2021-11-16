@@ -4,15 +4,20 @@ import { Quote } from './quote';
 interface AggregateOptions {
   groupBy?: any
   sortBy?: any,
-  from?: Date
+  from?: Date,
+  source?: any
 }
 
-export const getQuotesBy = async ({sortBy, from,groupBy}: AggregateOptions) => {
+export const getQuotesBy = async ({sortBy, from,groupBy, source}: AggregateOptions) => {
   let toProject: any = { _id: 0, __v: 0, updatedAt: 0, [groupBy]: 0 }
 
   const pipeline = QuoteModel.aggregate()
-  if (from) {
-    pipeline.match({createdAt: {$gte: from}})
+  if (from || source) {
+    let match: any = {}
+    if (from) match["createdAt"] = { $gte: from }
+    if (source) match["source"] = source
+    
+    pipeline.match(match)
   }
 
   if (sortBy) {

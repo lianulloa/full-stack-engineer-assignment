@@ -12,8 +12,12 @@ import SlippageLabel from "./slippageLabel";
 import PriceLabel from "./priceLabel";
 
 
-const QuoteCard: FC<{ quote: Quote, slippage: Omit<QuoteSlippage, "source"> }> =
-  ({ quote, slippage }) => {
+const QuoteCard: FC<{
+  quote: Quote,
+  slippage: Omit<QuoteSlippage, "source">,
+  onShowBehavior: Function
+}> =
+  ({ quote, slippage, onShowBehavior }) => {
     return (
       <Grid item xs={12} sm={6} >
         <Card variant="outlined">
@@ -43,6 +47,7 @@ const QuoteCard: FC<{ quote: Quote, slippage: Omit<QuoteSlippage, "source"> }> =
           <CardActions>
             <Button
               size="small"
+              onClick={() => onShowBehavior(quote.source)}
             >
               Show behavior
             </Button>
