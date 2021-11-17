@@ -13,13 +13,11 @@ class Scraper {
   }
 
   async getBlueDolarQuotes(url: string, selector: FinderSelector): Promise<Quote| Quote[] |undefined> {
-    // console.log("getting quote from ", url)
     const page = await this.browser.newPage()
     await page.goto(url, { waitUntil: "networkidle2" })
     const res = await page.evaluate(genericFinder, url, selector)
     if (res) {
       this.quotes.push(res)
-      // console.log(res)
     }
     return res
   }
@@ -35,7 +33,6 @@ class Scraper {
 }
 
 export const scrapperJob = async () => {
-  // console.log("scrapperJob")
   try {
     let browser = await puppeteer.launch()
     const scraper = new Scraper(browser)
